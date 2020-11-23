@@ -4,7 +4,6 @@ import Grid from '@material-ui/core/Grid'
 import Paper from '@material-ui/core/Paper'
 import { Calendar, momentLocalizer } from 'react-big-calendar'
 import 'react-big-calendar/lib/css/react-big-calendar.css'
-import styles from '../styles/Home.module.css'
 import { makeStyles } from '@material-ui/core/styles'
 
 const resos = typeof window !== 'undefined' ? JSON.parse(localStorage.getItem('resos')) : []
