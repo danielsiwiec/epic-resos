@@ -4,11 +4,9 @@ import Grid from '@material-ui/core/Grid'
 import Paper from '@material-ui/core/Paper'
 import { Calendar, momentLocalizer } from 'react-big-calendar'
 import 'react-big-calendar/lib/css/react-big-calendar.css'
-import { makeStyles } from '@material-ui/core/styles'
+import { withStyles } from '@material-ui/core/styles'
 
-const resos = typeof window !== 'undefined' ? JSON.parse(localStorage.getItem('resos')) : []
-
-const useStyles = makeStyles((theme) => ({
+const styles = theme => ({
   root: {
     flexGrow: 1,
     display: 'flex',
@@ -22,32 +20,46 @@ const useStyles = makeStyles((theme) => ({
     textAlign: 'center',
     color: theme.palette.text.secondary,
   },
-}))
+})
 
-export default function Cal() {
-  const localizer = momentLocalizer(moment)
-  const classes = useStyles()
+class Cal extends React.Component {
+  constructor(props) {
+    super(props)
+    this.localizer = momentLocalizer(moment)
+    this.state = {
+      resos: []
+    }
+  }
 
-  return (
-    <div className={classes.root}>
-      <Grid container spacing={2}>
-        <Grid item xs={3}>
-          <Paper className={classes.paper}>
-            Total resos: <b>{resos.length}</b>
-          </Paper>
+  componentDidMount() {
+    this.setState({ resos: JSON.parse(localStorage.getItem('resos')) })
+  }
+
+  render() {
+    const { classes } = this.props
+    return (
+      <div className={classes.root}>
+        <Grid container spacing={2}>
+          <Grid item xs={3}>
+            <Paper className={classes.paper}>
+              Total resos: <b>{this.state.resos.length}</b>
+            </Paper>
+          </Grid>
+          <Grid item xs={6}>
+            <Paper className={classes.paper}>
+              <Calendar
+                localizer={this.localizer}
+                events={this.state.resos}
+                startAccessor="start"
+                endAccessor="end"
+                style={{ height: 500 }}
+              />
+            </Paper>
+          </Grid>
         </Grid>
-        <Grid item xs={6}>
-          <Paper className={classes.paper}>
-            <Calendar
-              localizer={localizer}
-              events={resos}
-              startAccessor="start"
-              endAccessor="end"
-              style={{ height: 500 }}
-            />
-          </Paper>
-        </Grid>
-      </Grid>
-    </div>
-  )
+      </div>
+    )
+  }
 }
+
+export default withStyles(styles, { withTheme: true })(Cal)
