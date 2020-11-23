@@ -33,12 +33,10 @@ const listReservations = async ({ username, password }) => {
   return dates
 }
 
-export default function handler(req, res) {
+export default async (req, res) => {
   const username = req.body.username
   const password = req.body.password
-  return listReservations({ username, password }).then(dates => {
-    res.statusCode = 200
-    res.setHeader('Content-Type', 'application/json')
-    res.end(JSON.stringify({ dates: dates }))
-  })
+
+  const resos = await listReservations({ username, password })
+  res.json({ dates: resos })
 }
