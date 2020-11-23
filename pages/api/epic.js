@@ -1,5 +1,4 @@
 const puppeteer = require('puppeteer')
-const os = require('os')
 
 const loginPageWithAccountRedirect = 'https://www.epicpass.com/account/login.aspx?url=%2faccount%2fmy-account.aspx%3fma_1%3d4'
 const usernameField = '#txtUserName_3'
@@ -45,8 +44,7 @@ const parseResoElement = async resoElement => {
 const listReservations = async ({username, password}) => {
   const browser = await puppeteer.launch({
     headless: true,
-    product: 'chrome',
-    executablePath: `${os.tmpdir()}/.local-chromium`
+    product: 'chrome'
   })
 
   const page = await login(browser, username, password)
