@@ -47,7 +47,7 @@ const listReservations = async ({username, password}) => {
   
   const dates = Promise.all(resoElements.map(parseResoElement))
 
-  await browser.close();
+  await browser.close()
 
   return dates
 }
