@@ -34,10 +34,14 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <div className={classes.root}>
-        {loading && <Backdrop open={loading}><CircularProgress /></Backdrop>}
-        {!loading && <Login setLoading={setLoading} />}
-      </div>
+      {loading && <Backdrop open={loading}><CircularProgress /></Backdrop>}
+
+
+      {!loading &&
+        <div className={classes.root}>
+          <h1>Epic Resos that don't suck</h1>
+          <Login setLoading={setLoading} />
+        </div>}
     </div>
   )
 
