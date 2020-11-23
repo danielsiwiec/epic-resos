@@ -37,7 +37,7 @@ const parseResoElement = async resoElement => ({
 })
 
 const listReservations = async ({username, password}) => {
-  const browser = await puppeteer.launch({headless: false})
+  const browser = await puppeteer.launch({headless: true})
 
   const page = await login(browser, username, password)
 
