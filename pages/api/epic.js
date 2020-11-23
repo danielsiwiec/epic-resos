@@ -1,6 +1,4 @@
 const puppeteer = require('puppeteer')
-import { join } from 'path'
-import { tmpdir } from 'os'
 
 const loginPageWithAccountRedirect = 'https://www.epicpass.com/account/login.aspx?url=%2faccount%2fmy-account.aspx%3fma_1%3d4'
 const usernameField = '#txtUserName_3'
@@ -15,12 +13,6 @@ const reservationDateSelector = '.sctexteditor'
 
 const reservationListElement = '.season_passes__reservations__content__list'
 const reservationElements = '.season_passes__reservations__content__list > li'
-
-const tmpPath = tmpdir()
-const chromePath = join(tmpPath, '.local-chromium')
-const browserFetcher = puppeteer.createBrowserFetcher({
-  path: chromePath,
-})
 
 const login = async (browser, username, password) => {
   const page = await browser.newPage()
@@ -39,16 +31,20 @@ const login = async (browser, username, password) => {
   return page
 }
 
-const parseResoElement = async resoElement => ({
-  date: await getText(await resoElement.$(reservationDateSelector)),
-  place: await getText(await resoElement.$(reservationPlaceSelector))
-})
+const getText = async (element) => {
+  return (await element.getProperty('textContent')).jsonValue()
+}
+
+const parseResoElement = async resoElement => {
+  let place = await getText(await resoElement.$(reservationPlaceSelector))
+  let date = await getText(await resoElement.$(reservationDateSelector))
+  return {date, place}
+}
 
 const listReservations = async ({username, password}) => {
-  const revisionInfo = await browserFetcher.download('818858')
   const browser = await puppeteer.launch({
     headless: true,
-    executablePath: revisionInfo.executablePath,
+    product: 'chrome'
   })
 
   const page = await login(browser, username, password)
@@ -57,15 +53,11 @@ const listReservations = async ({username, password}) => {
   await page.waitForSelector(reservationListElement)
   const resoElements = await page.$$(reservationElements)
   
-  const dates = Promise.all(resoElements.map(parseResoElement))
+  const dates = await Promise.all(resoElements.map(parseResoElement))
 
   await browser.close()
 
   return dates
-}
-
-const getText = async (element) => {
-  return await (await element.getProperty('textContent')).jsonValue()
 }
 
 export default function handler(req, res) {
