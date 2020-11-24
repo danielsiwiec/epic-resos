@@ -1,4 +1,3 @@
-import Head from 'next/head'
 import Login from '../components/Login'
 
 import Backdrop from '@material-ui/core/Backdrop'
@@ -29,13 +28,7 @@ export default function Home() {
 
   return (
     <div>
-      <Head>
-        <title>Epic Reso Manager</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
       {loading && <Backdrop open={loading}><CircularProgress /></Backdrop>}
-
 
       {!loading &&
         <div className={classes.root}>
