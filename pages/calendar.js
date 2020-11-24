@@ -26,6 +26,13 @@ const groupByPlace = resos => {
   return resos.reduce((acc, reso) => { acc[reso.title] ? acc[reso.title]++ : acc[reso.title] = 1; return acc }, {})
 }
 
+const toEventModel = resos => resos.map(reso => ({
+  start: moment(reso.date),
+  end: moment(reso.date),
+  allDay: true,
+  title: reso.place
+}))
+
 class Cal extends React.Component {
   constructor(props) {
     super(props)
@@ -36,7 +43,8 @@ class Cal extends React.Component {
   }
 
   componentDidMount() {
-    this.setState({ resos: JSON.parse(localStorage.getItem('resos')) })
+    const epicData = JSON.parse(localStorage.getItem('epicData'))
+    this.setState({ resos: toEventModel(epicData.resos) })
   }
 
   render() {

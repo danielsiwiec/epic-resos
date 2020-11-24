@@ -10,7 +10,6 @@ export default class ReservationsPage {
   }
 
   async navigate() {
-    // await this.page.goto(this.url)
     await this.page.waitForSelector(this.reservationsExpandButton)
   }
 

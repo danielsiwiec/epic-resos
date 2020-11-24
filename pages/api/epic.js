@@ -1,6 +1,7 @@
 const puppeteer = require('puppeteer')
 import LoginPage from './pageobjects/login'
 import ReservationsPage from './pageobjects/reservations'
+import AvailabilityPage from './pageobjects/availability'
 
 const _loadBrowser = async () => {
   console.log('Loading browser...')
@@ -13,7 +14,10 @@ const _loadBrowser = async () => {
 
 let browser
 
-const listReservations = async ({ username, password }) => {
+export default async (req, res) => {
+  const username = req.body.username
+  const password = req.body.password
+
   browser = browser || await _loadBrowser()
 
   const context = await browser.createIncognitoBrowserContext()
@@ -21,22 +25,18 @@ const listReservations = async ({ username, password }) => {
 
   const loginPage = new LoginPage(page)
   const reservationsPage = new ReservationsPage(page)
+  const availabilityPage = new AvailabilityPage(page)
   
   await loginPage.navigate()
   await loginPage.submitCredentials({username, password})
 
   await reservationsPage.navigate()
-  const dates = await reservationsPage.listReservations()
+  const resos = await reservationsPage.listReservations()
+
+  await availabilityPage.navigate()
+  const availability = await availabilityPage.listAvailability()
 
   await page.close()
-
-  return dates
-}
-
-export default async (req, res) => {
-  const username = req.body.username
-  const password = req.body.password
-
-  const resos = await listReservations({ username, password })
-  res.json({ dates: resos })
+  
+  res.json({ resos, availability })
 }

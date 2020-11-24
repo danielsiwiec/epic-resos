@@ -80,12 +80,7 @@ const loadResos = async (router, username, password) => {
     body: JSON.stringify({ username, password })
   }).then(res => res.json())
 
-  const dates = response.dates
-  localStorage.setItem('resos', JSON.stringify(dates.map(reso => ({
-    start: moment(reso.date),
-    end: moment(reso.date),
-    allDay: true,
-    title: reso.place
-  }))))
+  const resos = response.resos
+  localStorage.setItem('epicData', JSON.stringify(response))
   router.push('/calendar')
 }
