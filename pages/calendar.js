@@ -22,6 +22,10 @@ const styles = theme => ({
   },
 })
 
+const groupByPlace = resos => {
+  return resos.reduce((acc, reso) => { acc[reso.title] ? acc[reso.title]++ : acc[reso.title] = 1; return acc }, {})
+}
+
 class Cal extends React.Component {
   constructor(props) {
     super(props)
@@ -37,19 +41,25 @@ class Cal extends React.Component {
 
   render() {
     const { classes } = this.props
+    const resos = this.state.resos
+
     return (
       <div className={classes.root}>
+        <h1>Resos</h1>
         <Grid container spacing={2}>
           <Grid item xs={3}>
+            <h2>Summary</h2>
             <Paper className={classes.paper}>
-              Total resos: <b>{this.state.resos.length}</b>
+              Total resos: <b>{resos.length}</b>
             </Paper>
+            <h3>By resort</h3>
+            {Object.entries(groupByPlace(resos)).map(([key, value]) => <Paper key={key} className={classes.paper}>{key}: {value}</Paper>)}
           </Grid>
           <Grid item xs={6}>
             <Paper className={classes.paper}>
               <Calendar
                 localizer={this.localizer}
-                events={this.state.resos}
+                events={resos}
                 startAccessor="start"
                 endAccessor="end"
                 style={{ height: 500 }}
