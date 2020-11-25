@@ -5,7 +5,6 @@ import Paper from '@material-ui/core/Paper'
 import { Calendar, momentLocalizer } from 'react-big-calendar'
 import 'react-big-calendar/lib/css/react-big-calendar.css'
 import { withStyles } from '@material-ui/core/styles'
-import Hidden from '@material-ui/core/Hidden'
 
 const styles = theme => ({
   root: {
@@ -28,14 +27,16 @@ const groupByPlace = resos => {
 }
 
 const toEventModel = epicData => {
-  return [].concat(resoToEventModel(epicData.resos), availabiliyToEventModel(epicData.availability))
+  return [].concat(resoToEventModel(epicData.resos), availabilityToEventModel(epicData.availability))
 }
 
-const availabiliyToEventModel = availability => availability.NoInventoryDays.map(item => ({
+const availabilityToEventModel = availabilities => availabilities.map(resortAvailabiliyDataToEventModel).flat()
+
+const resortAvailabiliyDataToEventModel = availability => availability.data.NoInventoryDays.map(item => ({
   start: moment(item),
   end: moment(item),
   allDay: true,
-  title: 'Heavenly',
+  title: availability.name,
   color: 'red'
 }))
 
@@ -54,9 +55,7 @@ class Cal extends React.Component {
     this.state = {
       epicData: {
         resos: [],
-        availability: {
-          NoInventoryDays: []
-        }
+        availability: []
       }
     }
   }
@@ -84,27 +83,14 @@ class Cal extends React.Component {
           </Grid>
           <Grid item xs={12} md={6}>
             <Paper className={classes.paper}>
-              <Hidden mdDown>
-                <Calendar
-                  localizer={this.localizer}
-                  events={toEventModel(epicData)}
-                  startAccessor="start"
-                  endAccessor="end"
-                  style={{ height: 500 }}
-                  eventPropGetter={(event, start, end, isSelected) => ({ style: { backgroundColor: event.color } })}
-                />
-              </Hidden>
-              <Hidden lgUp>
-                <Calendar
-                  localizer={this.localizer}
-                  events={toEventModel(epicData)}
-                  startAccessor="start"
-                  endAccessor="end"
-                  style={{ height: 500 }}
-                  eventPropGetter={(event, start, end, isSelected) => ({ style: { backgroundColor: event.color } })}
-                  defaultView='agenda'
-                />
-              </Hidden>
+              <Calendar
+                localizer={this.localizer}
+                events={toEventModel(epicData)}
+                startAccessor="start"
+                endAccessor="end"
+                style={{ height: 500 }}
+                eventPropGetter={(event, start, end, isSelected) => ({ style: { backgroundColor: event.color } })}
+              />
             </Paper>
           </Grid>
         </Grid>
