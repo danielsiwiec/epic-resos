@@ -66,7 +66,7 @@ class Cal extends React.Component {
             <h2>Legend</h2>
             <Paper className={classes.paper}>
               <h4 style={{color:'blue'}}>Booked by you</h4>
-              <h4 style={{color:'red'}}>Unavailable</h4>
+              <h4 style={{color:'red'}}>Full</h4>
             </Paper>
           </Grid>
         </Grid>
