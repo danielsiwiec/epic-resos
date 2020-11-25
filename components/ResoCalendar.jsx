@@ -35,7 +35,7 @@ export default function ResoCalendar(props) {
       events={toEventModel(props.data)}
       startAccessor="start"
       endAccessor="end"
-      style={{ height: 500 }}
+      style={{ height: 400 }}
       eventPropGetter={(event, start, end, isSelected) => ({ style: { backgroundColor: event.color } })}
     />
   )
