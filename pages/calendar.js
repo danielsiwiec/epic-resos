@@ -5,6 +5,7 @@ import Paper from '@material-ui/core/Paper'
 import { Calendar, momentLocalizer } from 'react-big-calendar'
 import 'react-big-calendar/lib/css/react-big-calendar.css'
 import { withStyles } from '@material-ui/core/styles'
+import Hidden from '@material-ui/core/Hidden'
 
 const styles = theme => ({
   root: {
@@ -73,7 +74,7 @@ class Cal extends React.Component {
       <div className={classes.root}>
         <h1>Resos</h1>
         <Grid container spacing={2}>
-          <Grid item xs={3}>
+          <Grid item xs={12} md={3}>
             <h2>Reso summary</h2>
             <Paper className={classes.paper}>
               Total: <b>{epicData.resos.length}</b>
@@ -81,16 +82,29 @@ class Cal extends React.Component {
             <h3>By resort</h3>
             {Object.entries(groupByPlace(epicData.resos)).map(([key, value]) => <Paper key={key} className={classes.paper}>{key}: {value}</Paper>)}
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={12} md={6}>
             <Paper className={classes.paper}>
-              <Calendar
-                localizer={this.localizer}
-                events={toEventModel(epicData)}
-                startAccessor="start"
-                endAccessor="end"
-                style={{ height: 500 }}
-                eventPropGetter={(event, start, end, isSelected) => ({ style: { backgroundColor: event.color } })}
-              />
+              <Hidden mdDown>
+                <Calendar
+                  localizer={this.localizer}
+                  events={toEventModel(epicData)}
+                  startAccessor="start"
+                  endAccessor="end"
+                  style={{ height: 500 }}
+                  eventPropGetter={(event, start, end, isSelected) => ({ style: { backgroundColor: event.color } })}
+                />
+              </Hidden>
+              <Hidden lgUp>
+                <Calendar
+                  localizer={this.localizer}
+                  events={toEventModel(epicData)}
+                  startAccessor="start"
+                  endAccessor="end"
+                  style={{ height: 500 }}
+                  eventPropGetter={(event, start, end, isSelected) => ({ style: { backgroundColor: event.color } })}
+                  defaultView='agenda'
+                />
+              </Hidden>
             </Paper>
           </Grid>
         </Grid>
