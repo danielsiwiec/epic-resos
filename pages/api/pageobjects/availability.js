@@ -10,7 +10,7 @@ export default class Availability {
   constructor(page) {
     this.page = page
     this.url = 'https://www.epicpass.com/plan-your-trip/lift-access/reservations.aspx?reservation=true'
-    this.availabilityUrl = resortCode => `https://www.epicpass.com/api/LiftAccessApi/GetCapacityControlReservationInventory?resortCode=${resortCode}&startDate=11%2F1%2F2020&endDate=11%2F30%2F2020&_=${moment().valueOf()}`
+    this.availabilityUrl = resortCode => `https://www.epicpass.com/api/LiftAccessApi/GetCapacityControlReservationInventory?resortCode=${resortCode}&startDate=11%2F1%2F2020&endDate=03%2F31%2F2021&_=${moment().valueOf()}`
     this.checkAvailabilityButton = '#passHolderReservationsSearchButton'
     this.selectResortDropdown = '#PassHolderReservationComponent_Resort_Selection'
   }
