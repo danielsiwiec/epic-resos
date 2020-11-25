@@ -28,7 +28,9 @@ export default function Home() {
 
   return (
     <div>
-      {loading && <Backdrop open={loading}><CircularProgress /></Backdrop>}
+      {loading && <Backdrop open={loading}>
+        <h2>Hang tight! This might take around 30 seconds</h2><CircularProgress />
+      </Backdrop>}
 
       {!loading &&
         <div className={classes.root}>
