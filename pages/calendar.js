@@ -26,11 +26,24 @@ const groupByPlace = resos => {
   return resos.reduce((acc, reso) => { acc[reso.place] ? acc[reso.place]++ : acc[reso.place] = 1; return acc }, {})
 }
 
-const toEventModel = resos => resos.map(reso => ({
-  start: moment(reso.date),
-  end: moment(reso.date),
+const toEventModel = epicData => {
+  return [].concat(resoToEventModel(epicData.resos), availabiliyToEventModel(epicData.availability))
+}
+
+const availabiliyToEventModel = availability => availability.NoInventoryDays.map(item => ({
+  start: moment(item),
+  end: moment(item),
   allDay: true,
-  title: reso.place
+  title: 'Heavenly',
+  color: 'red'
+}))
+
+const resoToEventModel = resos => resos.map(item => ({
+  start: moment(item.date),
+  end: moment(item.date),
+  allDay: true,
+  title: item.place,
+  color: 'blue'
 }))
 
 class Cal extends React.Component {
@@ -40,7 +53,9 @@ class Cal extends React.Component {
     this.state = {
       epicData: {
         resos: [],
-        availability: []
+        availability: {
+          NoInventoryDays: []
+        }
       }
     }
   }
@@ -70,10 +85,11 @@ class Cal extends React.Component {
             <Paper className={classes.paper}>
               <Calendar
                 localizer={this.localizer}
-                events={toEventModel(epicData.resos)}
+                events={toEventModel(epicData)}
                 startAccessor="start"
                 endAccessor="end"
                 style={{ height: 500 }}
+                eventPropGetter={(event, start, end, isSelected) => ({ style: { backgroundColor: event.color } })}
               />
             </Paper>
           </Grid>
