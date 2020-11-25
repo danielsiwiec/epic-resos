@@ -1,10 +1,9 @@
 import React from 'react'
-import moment from 'moment'
 import Grid from '@material-ui/core/Grid'
 import Paper from '@material-ui/core/Paper'
-import { Calendar, momentLocalizer } from 'react-big-calendar'
-import 'react-big-calendar/lib/css/react-big-calendar.css'
 import { withStyles } from '@material-ui/core/styles'
+
+import ResoCalendar from '../components/ResoCalendar'
 
 const styles = theme => ({
   root: {
@@ -26,32 +25,9 @@ const groupByPlace = resos => {
   return resos.reduce((acc, reso) => { acc[reso.place] ? acc[reso.place]++ : acc[reso.place] = 1; return acc }, {})
 }
 
-const toEventModel = epicData => {
-  return [].concat(resoToEventModel(epicData.resos), availabilityToEventModel(epicData.availability))
-}
-
-const availabilityToEventModel = availabilities => availabilities.map(resortAvailabiliyDataToEventModel).flat()
-
-const resortAvailabiliyDataToEventModel = availability => availability.data.NoInventoryDays.map(item => ({
-  start: moment(item),
-  end: moment(item),
-  allDay: true,
-  title: availability.name,
-  color: 'red'
-}))
-
-const resoToEventModel = resos => resos.map(item => ({
-  start: moment(item.date),
-  end: moment(item.date),
-  allDay: true,
-  title: item.place,
-  color: 'blue'
-}))
-
 class Cal extends React.Component {
   constructor(props) {
     super(props)
-    this.localizer = momentLocalizer(moment)
     this.state = {
       epicData: {
         resos: [],
@@ -83,14 +59,7 @@ class Cal extends React.Component {
           </Grid>
           <Grid item xs={12} md={6}>
             <Paper className={classes.paper}>
-              <Calendar
-                localizer={this.localizer}
-                events={toEventModel(epicData)}
-                startAccessor="start"
-                endAccessor="end"
-                style={{ height: 500 }}
-                eventPropGetter={(event, start, end, isSelected) => ({ style: { backgroundColor: event.color } })}
-              />
+              <ResoCalendar data={epicData} />
             </Paper>
           </Grid>
           <Grid item xs={12} md={3}>
