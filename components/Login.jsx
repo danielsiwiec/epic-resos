@@ -28,7 +28,6 @@ export default function Login(props) {
   return (
     <Container maxWidth="sm">
       <form className={classes.form}
-        noValidate
         onSubmit={e => { e.preventDefault(); props.setLoading(true); loadResos(router, email, password) }}>
         <TextField
           variant="outlined"
